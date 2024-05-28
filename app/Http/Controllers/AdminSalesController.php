@@ -56,6 +56,7 @@ class AdminSalesController extends Controller
         if($customer){
             $productQuery = DB::table('inventories')
                 ->select('inventories.*', 
+                'inventories.qr_code as qr_code',
                 'products.name as product_name', 
                 'products.gst as gst_rate',
                 'products.type as type',
@@ -63,7 +64,7 @@ class AdminSalesController extends Controller
                 'product_subcategories.name as subcategory_name',
                 'product_variations.color as Colour',
                 'product_variations.size as Size',
-                'product_variations.weight as weight',
+                'product_variations.weight as v_weight',
                 'product_variations.length as length',
                 'product_variations.liquid_volume as liquid_volume')
                 ->leftJoin('products', 'inventories.product_id', '=', 'products.id')
@@ -95,6 +96,7 @@ class AdminSalesController extends Controller
         $customer = User::where('mobile_number', $mobile_number)->first();
         $productQuery = DB::table('inventories')
                 ->select('inventories.*', 
+                'inventories.qr_code as qr_code',
                 'products.name as product_name', 
                 'products.gst as gst_rate',
                 'products.type as type',
@@ -102,7 +104,7 @@ class AdminSalesController extends Controller
                 'product_subcategories.name as subcategory_name',
                 'product_variations.color as Colour',
                 'product_variations.size as Size',
-                'product_variations.weight as weight',
+                'product_variations.weight as v_weight',
                 'product_variations.length as length',
                 'product_variations.liquid_volume as liquid_volume')
                 ->leftJoin('products', 'inventories.product_id', '=', 'products.id')
@@ -136,6 +138,7 @@ class AdminSalesController extends Controller
         $customer = Session::get('customer');
         $productQuery = DB::table('inventories')
                 ->select('inventories.*', 
+                'inventories.qr_code as qr_code',
                 'products.name as product_name', 
                 'products.gst as gst_rate',
                 'products.type as type',
@@ -143,7 +146,7 @@ class AdminSalesController extends Controller
                 'product_subcategories.name as subcategory_name',
                 'product_variations.color as Colour',
                 'product_variations.size as Size',
-                'product_variations.weight as weight',
+                'product_variations.weight as v_weight',
                 'product_variations.length as length',
                 'product_variations.liquid_volume as liquid_volume')
                 ->leftJoin('products', 'inventories.product_id', '=', 'products.id')
@@ -224,7 +227,7 @@ class AdminSalesController extends Controller
     // Add item to the cart
     $vendor_cart = new VendCart();
     $vendor_cart->customer_id = $request->customer_id;
-    $vendor_cart->user_id = $request->user_id;
+    $vendor_cart->user_id = Auth::user()->id;
     $vendor_cart->inventory_id = $request->inventory_id;
     $vendor_cart->product_name = $request->product_name;
     $vendor_cart->quantity = $quantity;

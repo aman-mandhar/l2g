@@ -6,7 +6,7 @@
             <div class="card">
                 <div class="logo_login">
                     <div class="center">
-                       <img width="400" src="{{ asset('ecom/images/Logo.png') }}" alt="#" />
+                       <img width="400" src="{{ asset('/ecom/images/Logo.png') }}" alt="#" />
                     </div>
                  </div>
                 <div class="card-header">{{ __('Login') }}</div>

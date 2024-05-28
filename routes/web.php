@@ -41,11 +41,19 @@ use Illuminate\Support\Facades\DB;
 |
 */
 
-Route::get('/ecom1', function () {
-    return view('ecom1');
+use App\Http\Controllers\CacheController;
+
+Route::get('/clear-config-cache', [CacheController::class, 'clearConfigCache']);
+Route::get('/clear-route-cache', [CacheController::class, 'clearRouteCache']);
+Route::get('/clear-view-cache', [CacheController::class, 'clearViewCache']);
+Route::get('/clear-app-cache', [CacheController::class, 'clearAppCache']);
+Route::get('/clear-all-caches', [CacheController::class, 'clearAllCaches']);
+
+Route::get('/', function () {
+    return view('ecom');
 });
 
-Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
+
 
 Auth::routes();
 
@@ -95,6 +103,16 @@ Route::put('/products/categories/{category}', [CategoryController::class, 'updat
 Route::delete('/products/categories/{category}', [CategoryController::class, 'destroy'])->name('products.categories.destroy');
 Route::get('/products/categories/search', [CategoryController::class, 'search'])->name('products.categories.search');
 
+// Admin Categories
+Route::get('/admin_products/categories', [CategoryController::class, 'index'])->name('admin_products.categories.index');
+Route::get('/admin_products/categories/create', [CategoryController::class, 'create'])->name('admin_products.categories.create');
+Route::get('/admin_products/categories/create', [CategoryController::class, 'create'])->name('admin_products.categories.create');
+Route::post('/admin_products/categories', [CategoryController::class, 'store'])->name('admin_products.categories.store');
+Route::get('/admin_products/categories/{category}/edit', [CategoryController::class, 'edit'])->name('admin_products.categories.edit');
+Route::put('/admin_products/categories/{category}', [CategoryController::class, 'update'])->name('admin_products.categories.update');
+Route::delete('/admin_products/categories/{category}', [CategoryController::class, 'destroy'])->name('admin_products.categories.destroy');
+Route::get('/admin_products/categories/search', [CategoryController::class, 'search'])->name('admin_products.categories.search');
+
 // Subcategories
 
 Route::get('/products/subcategories/create', [SubcategoryController::class, 'create'])->name('products.subcategories.create');
@@ -105,6 +123,16 @@ Route::put('/products/subcategories{subcategory}', [SubcategoryController::class
 Route::delete('/products/subcategories/{subcategory}', [SubcategoryController::class, 'destroy'])->name('products.subcategories.destroy');
 Route::get('/products/subcategories/search', [SubcategoryController::class, 'search'])->name('products.subcategories.search');
 
+// Admin Subcategories
+
+Route::get('/admin_products/subcategories/create', [SubcategoryController::class, 'create'])->name('admin_products.subcategories.create');
+Route::get('/admin_products/subcategories/create', [SubcategoryController::class, 'create'])->name('admin_products.subcategories.create');
+Route::post('/admin_products/subcategories', [SubcategoryController::class, 'store'])->name('admin_products.subcategories.store');
+Route::get('/admin_products/subcategories/{subcategory}/edit', [SubcategoryController::class, 'edit'])->name('admin_products.subcategories.edit');
+Route::put('/admin_products/subcategories{subcategory}', [SubcategoryController::class, 'update'])->name('admin_products.subcategories.update');
+Route::delete('/admin_products/subcategories/{subcategory}', [SubcategoryController::class, 'destroy'])->name('admin_products.subcategories.destroy');
+Route::get('/admin_products/subcategories/search', [SubcategoryController::class, 'search'])->name('admin_products.subcategories.search');
+
 // Variations
 Route::get('/products/variations', [VariationController::class, 'index'])->name('products.variations.index');
 Route::get('/products/variations/create', [VariationController::class, 'create'])->name('products.variations.create');
@@ -113,6 +141,15 @@ Route::post('/products/variations', [VariationController::class, 'store'])->name
 Route::get('/products/variations/{variation}/edit', [VariationController::class, 'edit'])->name('products.variations.edit');
 Route::put('/products/variations/{variation}', [VariationController::class, 'update'])->name('products.variations.update');
 Route::delete('/products/variations/{variation}', [VariationController::class, 'destroy'])->name('products.variations.destroy');
+
+// Admin Variations
+Route::get('/admin_products/variations', [VariationController::class, 'index'])->name('admin_products.variations.index');
+Route::get('/admin_products/variations/create', [VariationController::class, 'create'])->name('admin_products.variations.create');
+Route::get('/admin_products/variations/create', [VariationController::class, 'create'])->name('admin_products.variations.create');
+Route::post('/admin_products/variations', [VariationController::class, 'store'])->name('admin_products.variations.store');
+Route::get('/admin_products/variations/{variation}/edit', [VariationController::class, 'edit'])->name('admin_products.variations.edit');
+Route::put('/admin_products/variations/{variation}', [VariationController::class, 'update'])->name('admin_products.variations.update');
+Route::delete('/admin_products/variations/{variation}', [VariationController::class, 'destroy'])->name('admin_products.variations.destroy');
 
 // order
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
@@ -215,6 +252,10 @@ Route::get('/admin_sales/stock/{id}', [AdminSalesController::class, 'stock'])->n
 Route::get('/vendor_orders', [VendorOrderController::class, 'index'])->name('vendor_orders.index');
 Route::get('/vendor_orders/show/{id}', [VendorOrderController::class, 'show'])->name('vendor_orders.show');
 
+// Admin order
+Route::get('/admin_orders', [VendorOrderController::class, 'adminindex'])->name('admin_orders.index');
+Route::get('/admin_orders/show/{id}', [VendorOrderController::class, 'adminshow'])->name('admin_orders.show');
+
 // Shop
 Route::get('/shops', [ShopController::class, 'index'])->name('shops.index');
 Route::get('/shops/create', [ShopController::class, 'create'])->name('shops.create');
@@ -230,6 +271,10 @@ Route::get('/shops/search', [ShopController::class, 'search'])->name('shops.sear
 Route::get('/dayclose', [DayCloseController::class, 'index'])->name('dayclose.index');
 Route::get('/dayclose/search', [DayCloseController::class, 'search'])->name('dayclose.search');
 Route::post('/dayclose/updateStatus', [DayCloseController::class, 'updateStatus'])->name('dayclose.update');
+
+
+
+
 
 
 

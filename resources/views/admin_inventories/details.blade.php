@@ -77,7 +77,7 @@
             </table>
         </div>
         <div class="col-md-12">
-            <a href="{{ route('inventories.addstock') }}" class="btn btn-primary">Add More Stock</a>
+            <a href="{{ route('admin_inventories.addstock') }}" class="btn btn-primary">Add More Stock</a>
         </div>
     </div>
 </div>

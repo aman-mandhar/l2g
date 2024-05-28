@@ -21,7 +21,8 @@ class ShopController extends Controller
 
     public function create()
     {
-        return view('shops.create');
+        $shop = Shop::all();
+        return view('shops.create', compact('shop'));
     }
     
     public function createnew(Request $request)
@@ -87,18 +88,15 @@ class ShopController extends Controller
 
         return redirect()->route('admindashboard')
             ->with('success', 'Vendor created successfully.');
+    
+
+     // Show a shop
     }
-
-    // Show a vendor
-
     public function show(Shop $shop)
     {
         return view('shops.show', compact('shop'));
     }
 
-    // Edit a vendor
-
-    
     // Delete a vendor
 
     public function destroy(Shop $shop)

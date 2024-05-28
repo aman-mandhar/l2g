@@ -1,4 +1,4 @@
-@extends('layouts.panels.admin_panel.vendorlayout')
+@extends('layouts.panels.admin_panel.dashboard')
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -6,7 +6,7 @@
             <div class="card">
                 <div class="card-header">Create New Sale for Customer</div>
                 <div class="card-body">
-                    <form method="get" action="{{ route('vendor_sales.check') }}">
+                    <form method="get" action="{{ route('admin_sales.check') }}">
                         <div class="form-group">
                             <label for="mobile_number">Mobile Number</label>
                             <input type="text" required class="form-control" id="mobile_number" name="mobile_number" placeholder="Enter Mobile Number" value="{{ old('mobile_number') }}">

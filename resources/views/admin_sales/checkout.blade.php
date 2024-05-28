@@ -1,6 +1,6 @@
-@extends('layouts.panels.admin_panel.vendorlayout')
+@extends('layouts.panels.admin_panel.dashboard')
 @section('content')
 
-@livewire('vendor-checkout')
+@livewire('admin-checkout')
 
 @endsection

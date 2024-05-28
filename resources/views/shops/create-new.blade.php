@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <h1>Add New Shop</h1>
+            <h1>Add New Shop</h1><br>
             <form method="POST" action="{{ route('shops.store') }}">
                 @method('POST')
                 @csrf

@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-md-12">
             <h6>Add New Stock</h6>
-            <form action="{{ route('inventories.store') }}" method="POST">
+            <form action="{{ route('admin_inventories.store') }}" method="POST">
                 @csrf
             <table class="table">
                 <tr>
@@ -29,7 +29,7 @@
                     </td>
                     <td>
                         <label for="cost_price">Cost Price</label>
-                        <input type="number" name="cost_price" class="form-control" placeholder="Cost Price">
+                        <input type="decimal" name="cost_price" class="form-control" placeholder="Cost Price">
                     </td>
                     <td>
                         <label for="mrp">MRP</label>

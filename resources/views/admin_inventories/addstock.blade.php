@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-md-12">
             <h6>Search Product</h6>
-            <form action="{{ route('inventories.searchProduct') }}" method="GET">
+            <form action="{{ route('admin_inventories.searchProduct') }}" method="GET">
                 <div class="form-group">
                     <input type="text" name="search" class="form-control" placeholder="Search Product">
                 </div>

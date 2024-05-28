@@ -4,8 +4,8 @@
         <div class="row">
             <div class="col-md-12">
                 <h1>Inventory</h1>
-                <a href="{{ route('inventories.create') }}" class="btn btn-primary">Add Inventory</a>
-                <form action="{{ route('inventories.search') }}" method="GET">
+                <a href="{{ route('admin_inventories.create') }}" class="btn btn-primary">Add Inventory</a>
+                <form action="{{ route('admin_inventories.search') }}" method="GET">
                     <div class="form-group">
                         <label for="search">Search</label>
                         <input type="text" id="search" name="search" class="form-control" placeholder="Enter a keyword">

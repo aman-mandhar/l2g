@@ -2,7 +2,7 @@
 @section('content')
     <div class="container">
         <h5>Add New Subcategory</h5>
-        <form action="{{ route('products.subcategories.store') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('admin_products.subcategories.store') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
                 <label for="category_id">Category</label>
@@ -46,11 +46,7 @@
                         <td>{{ $subcategory->category->name }}</td>
                         <td>{{ $subcategory->description }}</td>
                         <td>
-                            <form action="{{ route('products.subcategories.edit', $subcategory->id) }}" method="GET">
-                                @csrf
-                                <button type="submit" class="btn btn-primary">Edit</button>
-                            </form>
-                            <form action="{{ route('products.subcategories.destroy', $subcategory->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this subcategory?')">
+                            <form action="{{ route('admin_products.subcategories.destroy', $subcategory->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this subcategory?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger">Delete</button>

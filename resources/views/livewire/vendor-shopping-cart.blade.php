@@ -46,8 +46,13 @@
                                 </tr>
                                 <tr>
                                     <td colspan="6">
-                                        <a href="{{ route('vendor_sales.create') }}" class="btn btn-primary">Continue Shopping</a>
-                                        <a href="{{ route('vendor_sales.checkout') }}" class="btn btn-success">Checkout</a>
+                                        @if($user->user_role == 10)
+                                            <a href="{{ route('vendor_sales.create') }}" class="btn btn-primary">Continue Shopping</a>
+                                            <a href="{{ route('vendor_sales.checkout') }}" class="btn btn-success">Checkout</a>
+                                        @elseif($user->user_role == 1)
+                                            <a href="{{ route('admin_sales.create') }}" class="btn btn-primary">Continue Shopping</a>
+                                            <a href="{{ route('admin_sales.checkout') }}" class="btn btn-success">Checkout</a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endif

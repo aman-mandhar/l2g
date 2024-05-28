@@ -53,10 +53,10 @@
              <a href="#additional_page" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-clone yellow_color"></i> <span>Stock</span></a>
              <ul class="collapse list-unstyled" id="additional_page">
                <li>
-                  <a href="{{ route('inventories.addstock') }}">> <span>Add Stock</span></a>
+                  <a href="{{ route('admin_inventories.addstock') }}">> <span>Add Stock</span></a>
                </li>
                 <li>
-                   <a href="{{ route('inventories.index') }}">> <span>All Stock List</span></a>
+                   <a href="{{ route('admin_inventories.index') }}">> <span>All Stock List</span></a>
                 </li>
              </ul>
           </li>

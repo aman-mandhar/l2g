@@ -2,7 +2,7 @@
 @section('content')
     <div class="container">
         <h5>Add New Variation</h5>
-        <form action="{{ route('products.variations.store') }}" method="post">
+        <form action="{{ route('admin_products.variations.store') }}" method="post">
             @csrf
             <div class="form-group">
                 <label for="subcategory_id">Subcategory</label>
@@ -60,10 +60,7 @@
                         <td>{{ $variation->length }}</td>
                         <td>{{ $variation->liquid_volume }}</td>
                         <td>
-                            <a href="{{ route('products.variations.edit', $variation->id) }}" class="btn btn-primary">Edit</a>
-                        </td>
-                        <td>
-                            <form action="{{ route('products.variations.destroy', $variation->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this variation?')">
+                            <form action="{{ route('admin_products.variations.destroy', $variation->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this variation?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger">Delete</button>

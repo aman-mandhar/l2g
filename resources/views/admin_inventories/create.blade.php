@@ -22,7 +22,7 @@
                             <td>{{ $product->name }}</td>
                             <td>{{ $product->category_name }}</td>
                             <td>
-                                <form action="{{ route('inventories.addnewstock') }}" method = "GET">
+                                <form action="{{ route('admin_inventories.addnewstock') }}" method = "GET">
                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                                     <button type="submit" class="btn btn-primary">Add Stock</button>
                                 </form>

@@ -161,7 +161,7 @@ class InventoryController extends Controller
         $formdata = $request->validate([
             'qty' => 'nullable|numeric',
             'weight' => 'nullable|numeric',
-            'cost_price' => 'required|numeric',
+            'cost_price' => 'required|decimal:2',
             'mrp' => 'required|numeric',
             'sale_price' => 'required|numeric',
             'discount' => 'nullable|numeric',

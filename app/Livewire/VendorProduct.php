@@ -91,7 +91,7 @@ class VendorProduct extends Component
     $product->save();
 
     session()->flash('message', 'Product created successfully.');
-    return redirect()->route('vendor_products.create');
+    return redirect()->route('admin_products.create');
     }
 
     public function render()

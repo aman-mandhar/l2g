@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Item;
+use App\Models\Product;
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Models\User;
 
 
 class CategoryController extends Controller
@@ -19,21 +20,35 @@ class CategoryController extends Controller
     $categories = ProductCategory::where('name', 'like', '%' . $search . '%')
         ->orWhere('description', 'like', '%' . $search . '%')
         ->get();
-
-    return view('products.categories.create', compact('categories'));
+    $user = auth()->user();
+    if ($user->user_role == '10') {
+        return view('products.categories.create', compact('categories'));
+    } else if ($user->user_role == '1') {
+        return view('admin_products.categories.create', compact('categories'));
+    }
 }
 
     
     public function index()
     {
         $categories = ProductCategory::all();
-        return view('products.categories.create', compact('categories'));
+        $user = auth()->user();
+        if ($user->user_role == '10') {
+            return view('products.categories.create', compact('categories'));
+        } else if ($user->user_role == '1') {
+            return view('admin_products.categories.create', compact('categories'));
+        }
     }
 
     public function create()
     {
         $categories = ProductCategory::all();
-        return view('products.categories.create', compact('categories'));
+        $user = auth()->user();
+        if ($user->user_role == '10') {
+            return view('products.categories.create', compact('categories'));
+        } else if ($user->user_role == '1') {
+            return view('admin_products.categories.create', compact('categories'));
+        }
     }
 
     public function store(Request $request)
@@ -60,7 +75,14 @@ class CategoryController extends Controller
     ]);
 
     if ($category) {
-        return redirect()->route('products.categories.index')->with('success', 'Category created successfully');
+        $user = auth()->user();
+        if ($user->user_role == '10') {
+            $categories = ProductCategory::all();
+            return view('products.categories.create', compact('categories'));
+        } else if ($user->user_role == '1') {
+            $categories = ProductCategory::all();
+            return view('admin_products.categories.create', compact('categories'));
+        }
     } else {
         
         
@@ -69,43 +91,18 @@ class CategoryController extends Controller
 }
 
 
-    
-        
-                
-        
-
-    public function edit(ProductCategory $category)
-    {
-        
-        return view('products.categories.edit', compact('category'));
-    }
-
-    public function update(Request $request , ProductCategory $category)
-    {
-        $request->validate([
-            'name' => 'required',
-            'description' => 'nullable',
-            'image' => 'nullable',
-        ]);
-
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $image_name = time() . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path('/images/categories');
-            $image->move($destinationPath, $image_name);
-            $request->merge(['image' => $image_name]);
-        }
-
-        $category->update($request->all());
-
-        return redirect()->route('products.categories.create')->with('success', 'Category updated successfully');
-    }
-
     public function destroy(ProductCategory $category)
     {
         $category->delete();
 
-        return redirect()->route('products.categories.create')->with('success', 'Category deleted successfully');
+        $user = auth()->user();
+        if ($user->user_role == '10') {
+            $categories = ProductCategory::all();
+            return view('products.categories.create', compact('categories'));
+        } else if ($user->user_role == '1') {
+            $categories = ProductCategory::all();
+            return view('admin_products.categories.create', compact('categories'));
+        }
     }
 }
 

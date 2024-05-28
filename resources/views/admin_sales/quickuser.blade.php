@@ -1,8 +1,8 @@
-@extends('layouts.panels.admin_panel.vendorlayout')
+@extends('layouts.panels.admin_panel.dashboard')
 @section('content')
             <div class="card-header">Create New Customer</div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('vendor_sales.newuser') }}">
+                    <form method="POST" action="{{ route('admin_sales.newuser') }}">
                         @csrf
                             <input id="name" hidden type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="Customer Name" required autocomplete="name" autofocus>
                 

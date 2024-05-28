@@ -5,12 +5,12 @@
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="footer__about">
                     <div class="footer__about__logo">
-                        <b>Official Address</b>
+                        <b>Developed by</b>
                     </div>
                     <ul>
-                        <li>Address: Akaal Market, Queens Road, Opp. Railway Station, Amritsar, Punjab, INDIA - 143001</li>
-                        <li>Phone: +91 8283847501</li>
-                        <li>Email: care@zksuperstore.com</li>
+                        <li>PARTH MULTISOLUTIONS, <br>Plot No. 567, Guru Gobind Singh Avenue, Jalandhar</li>
+                        <li>Phone: +91 9592306823</li>
+                        <li>Email: parthmultisolution@gmail.com</li>
                     </ul>
                 </div>
             </div>
@@ -24,8 +24,8 @@
                       </ul>
                       <ul>
                         <h6>Make Money with Us</h6>
-                        <li><a href="#">Sell on ZK</a></li>
-                        <li><a href="#">Sell under ZK</a></li>
+                        <li><a href="#">Sell with PMS</a></li>
+                        <li><a href="#">Sell under PMS</a></li>
                         <li><a href="#">Become an Associate</a></li>
                       </ul>
                       

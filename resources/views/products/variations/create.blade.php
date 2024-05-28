@@ -4,6 +4,7 @@
         <h5>Add New Variation</h5>
         <form action="{{ route('products.variations.store') }}" method="post">
             @csrf
+            @csrf
             <div class="form-group">
                 <label for="subcategory_id">Subcategory</label>
                 <select name="subcategory_id" id="subcategory_id" class="form-control">
@@ -31,7 +32,7 @@
             <div class="form-group">
                 <label for = "liquid_volume">Liquid Volume</label>
                 <input type="liquid_volume" name="liquid_volume" id="liquid_volume" class="form-control">
-            </div>              
+            </div>                        
             <button type="submit" class="btn btn-primary">Add Variation</button>
         </form>
 

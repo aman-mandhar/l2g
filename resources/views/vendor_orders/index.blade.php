@@ -5,8 +5,6 @@
         <h4>Sale Orders List</h4>
         <tr>
             <th>Order ID</th>
-            <th>Product Name</th>
-            <th>Discount Coupens</th>
             <th>Amount</th>
             <th>GST</th>
             <th>Date</th>
@@ -16,8 +14,6 @@
         @foreach ($orders as $order)
             <tr>
                 <td>{{ $order->id }}</td>
-                <td>{{ $order->product_name }}</td>
-                <td>{{ $order->order_discount }}</td>
                 <td>{{ $order->amount }}</td>
                 <td>{{ $order->gst }}</td>
                 <td>{{ $order->created_at }}</td>

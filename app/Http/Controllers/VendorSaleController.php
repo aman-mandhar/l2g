@@ -70,7 +70,7 @@ class VendorSaleController extends Controller
                 'product_subcategories.name as subcategory_name',
                 'product_variations.color as Colour',
                 'product_variations.size as Size',
-                'product_variations.weight as weight',
+                'product_variations.weight as v_weight',
                 'product_variations.length as length',
                 'product_variations.liquid_volume as liquid_volume')
                 ->leftJoin('products', 'inventories.product_id', '=', 'products.id')
@@ -109,7 +109,7 @@ class VendorSaleController extends Controller
                 'product_subcategories.name as subcategory_name',
                 'product_variations.color as Colour',
                 'product_variations.size as Size',
-                'product_variations.weight as weight',
+                'product_variations.weight as v_weight',
                 'product_variations.length as length',
                 'product_variations.liquid_volume as liquid_volume')
                 ->leftJoin('products', 'inventories.product_id', '=', 'products.id')
@@ -150,7 +150,7 @@ class VendorSaleController extends Controller
                 'product_subcategories.name as subcategory_name',
                 'product_variations.color as Colour',
                 'product_variations.size as Size',
-                'product_variations.weight as weight',
+                'product_variations.weight as v_weight',
                 'product_variations.length as length',
                 'product_variations.liquid_volume as liquid_volume')
                 ->leftJoin('products', 'inventories.product_id', '=', 'products.id')

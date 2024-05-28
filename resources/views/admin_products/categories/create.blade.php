@@ -2,7 +2,7 @@
 @section('content')
     <div class="container">
         <h5>Add New Category</h5>
-        <form action="{{ route('products.categories.store') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('admin_products.categories.store') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
                 <label for="name">Category Name:</label>
@@ -25,7 +25,7 @@
         <hr>
 
         <h5>Search Categories</h5>
-            <form action="{{ route('products.categories.search') }}" method="GET">
+            <form action="{{ route('admin_products.categories.search') }}" method="GET">
                 <div class="form-group">
                     <label for="search">Search:</label>
                     <input type="text" name="search" id="search" class="form-control" placeholder="Search by Name or Description">
@@ -52,13 +52,7 @@
                             <img src="{{ asset('images/' . $category->image) }}" alt="{{ $category->name }}" width="100">
                         </td>
                         <td>
-                            <form action="{{ route('products.categories.edit', $category->id) }}" method="get">
-                                @csrf
-                                @method('GET')
-                                <button type="submit" class="btn btn-primary">Edit</button>
-                            </form>
-                            
-                            <form action="{{ route('products.categories.destroy', $category->id) }}" method="post">
+                            <form action="{{ route('admin_products.categories.destroy', $category->id) }}" method="post">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-danger">Delete</button>

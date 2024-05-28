@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Item;
+use App\Models\User;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductSubcategory;
@@ -13,8 +13,15 @@ class VariationController extends Controller
 {
     public function index()
     {
+        $categories = ProductCategory::all();
+        $subcategories = ProductSubcategory::all();
         $variations = ProductVariation::all();
-        return view('products.variations.index', compact('variations'));
+        $user = auth()->user();
+        if ($user->user_role == '10') {
+            return view('products.variations.create');
+        } else if ($user->user_role == '1') {
+            return view('admin_products.variations.create', compact('subcategories', 'categories', 'variations'));
+        }
     }
 
     public function create()
@@ -22,7 +29,12 @@ class VariationController extends Controller
         $categories = ProductCategory::all();
         $subcategories = ProductSubcategory::all();
         $variations = ProductVariation::all();
-        return view('products.variations.create', compact('subcategories', 'categories', 'variations'));
+        $user = auth()->user();
+        if ($user->user_role == '10') {
+            return view('products.variations.create', compact('subcategories', 'categories', 'variations'));
+        } else if ($user->user_role == '1') {
+            return view('admin_products.variations.create', compact('subcategories', 'categories', 'variations'));
+        }
     }
 
     public function store(Request $request)
@@ -38,35 +50,31 @@ class VariationController extends Controller
 
         ProductVariation::create($request->all());
 
-        return redirect()->route('products.variations.create')->with('success', 'Variation created successfully');
-    }
-
-    public function edit(ProductVariation $variation)
-    {
+        $categories = ProductCategory::all();
         $subcategories = ProductSubcategory::all();
-        return view('products.variations.edit', compact('variation', 'subcategories'));
+        $variations = ProductVariation::all();
+        $user = auth()->user();
+        if ($user->user_role == '10') {
+            return view('products.variations.create', compact('subcategories', 'categories', 'variations'));
+        } else if ($user->user_role == '1') {
+            return view('admin_products.variations.create', compact('subcategories', 'categories', 'variations'));
+        }
     }
 
-    public function update(Request $request, ProductVariation $variation)
-    {
-        $request->validate([
-            'subcategory_id' => 'required',
-            'color' => 'nullable',
-            'size' => 'nullable',
-            'weight' => 'nullable',
-            'length' => 'nullable',
-            'liquid_volume' => 'nullable',
-        ]);
-
-        $variation->update($request->all());
-
-        return redirect()->route('products.variations.create')->with('success', 'Variation updated successfully');
-    }
+    
 
     public function destroy(ProductVariation $variation)
     {
         $variation->delete();
 
-        return redirect()->route('products.variations.create')->with('success', 'Variation deleted successfully');
+        $categories = ProductCategory::all();
+        $subcategories = ProductSubcategory::all();
+        $variations = ProductVariation::all();
+        $user = auth()->user();
+        if ($user->user_role == '10') {
+            return view('products.variations.create', compact('subcategories', 'categories', 'variations'));
+        } else if ($user->user_role == '1') {
+            return view('admin_products.variations.create', compact('subcategories', 'categories', 'variations'));
+        }
     }
 }
