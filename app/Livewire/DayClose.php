@@ -19,11 +19,40 @@ class DayClose extends Component
     public $total_amt;
     public $selectAll = false;
     public $selectedOrders = [];
+    public $todays;
+    public $all_orders;
+    public $all_amount;
+    public $all_cash;
+    public $all_card;
+    public $all_upi;
+    public $all_cost;
+    public $all_sales;
+    public $all_profit;
 
     public function mount()
     {
-        $this->loadOrders();
         $this->vendors = Vendor::all();
+
+        // Fetch all orders of all vendors
+
+        $this->todays = DB::table('orders')
+        ->select('orders.*',
+        'inventories.cost_price as cost',)
+        ->leftJoin('vend_carts', 'orders.id', '=', 'vend_carts.order_id')
+        ->leftJoin('inventories', 'vend_carts.inventory_id', '=', 'inventories.id')->get();
+        
+        $this->all_orders = $this->todays->count();
+        $this->all_amount = $this->todays->sum('amount');
+        $this->all_cash = $this->todays->sum('cash');
+        $this->all_card = $this->todays->sum('card');
+        $this->all_upi = $this->todays->sum('upi');
+
+        $this->all_cost = $this->todays->sum('cost');
+        $this->all_sales = $this->all_amount;
+        $this->all_profit = $this->all_sales - $this->all_cost;
+
+        $this->loadOrders();
+        
     }
 
     public function loadOrders()

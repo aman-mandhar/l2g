@@ -5,8 +5,62 @@
         </div>
     @endif
 
-    <form method="GET" wire:submit.prevent="search">
-        @csrf
+
+    <div class="white_shd full margin_bottom_30">
+        <div class="full graph">
+            <div class="heading1 margin_0">
+                <h5>Day Summary</h5>
+            </div>
+            <div class="table_section padding_infor_info">
+                <div class="table-responsive-sm">
+                    <table class="table table-dark">
+                        <thead>
+                            <tr>
+                                <th>Total Cost</th>
+                                <th>Total Sale</th>
+                                <th>Profit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ $all_cost }}</td>
+                                <td>{{ $all_sales }}</td>
+                                <td>{{ $all_profit }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                <div class="table-responsive-sm">
+                    <table class="table table-dark">
+                        <thead>
+                            <tr>
+                                <th>Orders</th>
+                                <th>Total</th>
+                                <th>Cash</th>
+                                <th>Card</th>
+                                <th>Upi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ $all_orders }}</td>
+                                <td>{{ $all_amount }}</td>
+                                <td>{{ $all_cash }}</td>
+                                <td>{{ $all_card }}</td>
+                                <td>{{ $all_upi }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+    <div class="heading1 margin_0">
+        <h5>Day Close</h5>
+    </div>
+    <div class="form">
+        <form method="GET" wire:submit.prevent="search">
+            @csrf
         <div class="form-group">
             <label for="user_id">Vendor</label>
             <select class="form-control" id="user_id" name="user_id">
@@ -15,9 +69,9 @@
                 @endforeach
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form>
-
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
     <div class="white_shd full margin_bottom_30">
         <div class="full graph_head">
             <div class="heading1 margin_0">
@@ -77,3 +131,7 @@
         </div>
     </div>
 </div>
+
+    
+
+

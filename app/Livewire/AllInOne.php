@@ -38,6 +38,16 @@ class AllInOne extends Component
     public $weights;
     public $stocks;
     public $orders;
+    public $all_amount;
+    public $all_orders;
+    public $all_cash;
+    public $all_card;
+    public $all_upi;
+    public $all;
+    public $all_cost;
+    public $all_sales;
+    public $all_profit;
+    
     
     
 
@@ -91,7 +101,8 @@ class AllInOne extends Component
        
         $this->orders = DB::table('orders')
         ->select('orders.*',)
-        ->where('user_id', Auth::user()->id)
+        ->leftJoin('vend_carts', 'orders.id', '=', 'vend_carts.order_id')
+        ->leftJoin('inventories', 'vend_carts.inventory_id', '=', 'inventories.id')->where('user_id', Auth::user()->id)
         ->where('status', 'pending')->get();
 
         $this->today_orders = $this->orders->count();
@@ -100,10 +111,12 @@ class AllInOne extends Component
         $this->today_card = $this->orders->sum('card');
         $this->today_upi = $this->orders->sum('upi');
 
-        // Fetch all orders
+        // Fetch all orders of vendor
 
         $this->allProducts = DB::table('orders')
         ->select('orders.*',)
+        ->leftJoin('vend_carts', 'orders.id', '=', 'vend_carts.order_id')
+        ->leftJoin('inventories', 'vend_carts.inventory_id', '=', 'inventories.id')
         ->where('user_id', Auth::user()->id)->get();
 
         $this->total_orders = $this->allProducts->count();
@@ -111,7 +124,24 @@ class AllInOne extends Component
         $this->total_cash = $this->allProducts->sum('cash');
         $this->total_card = $this->allProducts->sum('card');
         $this->total_upi = $this->allProducts->sum('upi');
-            
+
+        // Fetch all orders of all vendors
+
+        $this->todays = DB::table('orders')
+        ->select('orders.*',
+        'inventories.cost_price as cost',)
+        ->leftJoin('vend_carts', 'orders.id', '=', 'vend_carts.order_id')
+        ->leftJoin('inventories', 'vend_carts.inventory_id', '=', 'inventories.id')->get();
+        
+        $this->all_orders = $this->todays->count();
+        $this->all_amount = $this->todays->sum('amount');
+        $this->all_cash = $this->todays->sum('cash');
+        $this->all_card = $this->todays->sum('card');
+        $this->all_upi = $this->todays->sum('upi');
+
+        $this->all_cost = $this->todays->sum('cost');
+        $this->all_sales = $this->all_amount;
+        $this->all_profit = $this->all_sales - $this->all_cost;
     }
     
     public function render()
