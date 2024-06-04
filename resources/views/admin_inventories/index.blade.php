@@ -15,8 +15,10 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <th>Stock Id</th>
                             <th>Product Name</th>
-                            <th>Product Price</th>
+                            <th>Cost Price</th>
+                            <th>Sale Price</th>
                             <th>Stock in Hand</th>
                             <th>Barcode</th>
                             
@@ -25,7 +27,9 @@
                     <tbody>
                         @foreach($inventories as $inventory)
                             <tr>
+                                <td>{{ $inventory->id }}</td>
                                 <td>{{ $inventory->product_name }}</td>
+                                <td>{{ $inventory->cost_price }}</td>
                                 <td>{{ $inventory->sale_price }}</td>
                                 <td>
                                     <!-- Fetching Balance Stock -->

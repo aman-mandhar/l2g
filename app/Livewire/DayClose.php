@@ -40,12 +40,12 @@ class DayClose extends Component
             'orders.cash',
             'orders.card',
             'orders.upi',
-            DB::raw('SUM(inventories.cost_price) as cost')
+            DB::raw('(inventories.cost_price * vend_carts.quantity) as cost'),
+            DB::raw('(inventories.sale_price * vend_carts.quantity) as sales')
         )
         ->leftJoin('vend_carts', 'orders.id', '=', 'vend_carts.order_id')
         ->leftJoin('inventories', 'vend_carts.inventory_id', '=', 'inventories.id')
         ->where('orders.status', '=', 'pending')
-        ->groupBy('orders.id')
         ->get();
 
     $this->all_orders = $this->todays->count();
@@ -55,7 +55,7 @@ class DayClose extends Component
     $this->all_upi = $this->todays->sum('upi');
 
     $this->all_cost = $this->todays->sum('cost');
-    $this->all_sales = $this->all_amount;
+    $this->all_sales = $this->todays->sum('sales');
     $this->all_profit = $this->all_sales - $this->all_cost;
 
     $this->loadOrders();
