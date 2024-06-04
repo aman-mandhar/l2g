@@ -35,7 +35,7 @@ class DayClose extends Component
 
     $this->todays = DB::table('orders')
         ->select(
-            'orders.id',
+            'orders.id as id',
             'orders.amount',
             'orders.cash',
             'orders.card',
@@ -48,7 +48,7 @@ class DayClose extends Component
         ->where('orders.status', '=', 'pending')
         ->get();
 
-    $this->all_orders = $this->todays->count();
+    $this->all_orders = $this->todays->count('id');
     $this->all_amount = $this->todays->sum('amount');
     $this->all_cash = $this->todays->sum('cash');
     $this->all_card = $this->todays->sum('card');

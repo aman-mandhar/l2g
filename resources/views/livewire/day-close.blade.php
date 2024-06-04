@@ -29,29 +29,7 @@
                             </tr>
                         </tbody>
                     </table>
-                <div class="table-responsive-sm">
-                    <table class="table table-dark">
-                        <thead>
-                            <tr>
-                                <th>Orders</th>
-                                <th>Total</th>
-                                <th>Cash</th>
-                                <th>Card</th>
-                                <th>Upi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{ $all_orders }}</td>
-                                <td>{{ $all_amount }}</td>
-                                <td>{{ $all_cash }}</td>
-                                <td>{{ $all_card }}</td>
-                                <td>{{ $all_upi }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
-            </div>
         </div>
     </div>
     <div>
