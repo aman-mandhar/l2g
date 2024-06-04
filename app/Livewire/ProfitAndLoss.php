@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Livewire\WithPagination;
+use Illuminate\Support\Collection;
 
 use App\Models\Product;
 use App\Models\ProductCategory;
@@ -23,40 +24,66 @@ class ProfitAndLoss extends Component
 {
     use WithPagination;
 
-    public function render()
+    public $all_orders;
+    public $all_amount;
+    public $all_cash;
+    public $all_card;
+    public $all_upi;
+    public $all_cost;
+    public $all_sales;
+    public $all_profit;
+    public $products = [];
+
+    public function mount()
     {
-        // Calculate profit and loss
-        $products = DB::table('orders')
+        $paginatedProducts = DB::table('orders')
             ->select(
                 'orders.id',
-                'products.name as product_name',
-                'product_categories.name as category_name',
-                'product_subcategories.name as subcategory_name',
-                'product_variations.color as colour',
-                'product_variations.size as size',
-                'product_variations.weight as weight',
-                'product_variations.length as length',
-                'product_variations.liquid_volume as liquid',
-                'orders.created_at as date',
-                'orders.amount as sale',
-                'inventories.qty as stock',
-                'inventories.cost_price as cost_price',
-                'inventories.sale_price as sale_price',
-                DB::raw('SUM(orders.amount) as total_sales'),
-                DB::raw('SUM(inventories.cost_price) as total_cost'),
-                DB::raw('SUM(orders.amount) - SUM(inventories.cost_price) as profit')
+                'orders.amount',
+                'orders.cash',
+                'orders.card',
+                'orders.upi',
+                DB::raw('SUM(inventories.cost_price) as cost')
             )
             ->leftJoin('vend_carts', 'orders.id', '=', 'vend_carts.order_id')
             ->leftJoin('inventories', 'vend_carts.inventory_id', '=', 'inventories.id')
-            ->leftJoin('products', 'inventories.product_id', '=', 'products.id')
-            ->leftJoin('product_categories', 'products.category_id', '=', 'product_categories.id')
-            ->leftJoin('product_subcategories', 'products.subcategory_id', '=', 'product_subcategories.id')
-            ->leftJoin('product_variations', 'products.variation_id', '=', 'product_variations.id')
-            ->whereNotNull('vend_carts.order_id')
-            ->whereNull('vend_carts.deleted_at')
-            ->groupBy('orders.id', 'products.id', 'product_categories.id', 'product_subcategories.id', 'product_variations.id', 'inventories.id')
+            ->where('orders.status', '=', 'pending')
+            ->groupBy('orders.id')
             ->paginate(20);
 
-        return view('livewire.profit-and-loss', ['products' => $products]);
+        // Convert paginated products to array
+        $this->products = $paginatedProducts->items();
+
+        // Convert products to collection for calculations
+        $productsCollection = Collection::make($this->products);
+
+        $this->all_amount = $productsCollection->sum('amount');
+        $this->all_cash = $productsCollection->sum('cash');
+        $this->all_card = $productsCollection->sum('card');
+        $this->all_upi = $productsCollection->sum('upi');
+        $this->all_cost = $productsCollection->sum('cost');
+        $this->all_orders = $productsCollection->count();
+        $this->all_sales = $this->all_amount;
+        $this->all_profit = $this->all_sales - $this->all_cost;
+    }
+
+    public function render()
+    {
+        return view('livewire.profit-and-loss', [
+            'paginatedProducts' => DB::table('orders')
+                ->select(
+                    'orders.id',
+                    'orders.amount',
+                    'orders.cash',
+                    'orders.card',
+                    'orders.upi',
+                    DB::raw('SUM(inventories.cost_price) as cost')
+                )
+                ->leftJoin('vend_carts', 'orders.id', '=', 'vend_carts.order_id')
+                ->leftJoin('inventories', 'vend_carts.inventory_id', '=', 'inventories.id')
+                ->where('orders.status', '=', 'pending')
+                ->groupBy('orders.id')
+                ->paginate(20)
+        ]);
     }
 }

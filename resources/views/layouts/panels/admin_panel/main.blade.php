@@ -1,5 +1,10 @@
 @extends('layouts.panels.admin_panel.dashboard')
-@include('layouts.panels.admin_panel.navbar')
 @section('content')
-@livewire('profit-and-loss')
+    <div>
+        @if(session()->has('message'))
+            <div class="alert alert-success">
+                {{ session('message') }}
+            </div>
+        @endif
+        @livewire('ProfitAndLoss')  
 @endsection

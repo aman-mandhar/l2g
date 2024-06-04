@@ -31,54 +31,81 @@ class DayClose extends Component
 
     public function mount()
     {
-        $this->vendors = Vendor::all();
+    $this->vendors = Vendor::all();
 
-        // Fetch all orders of all vendors
-
-        $this->todays = DB::table('orders')
-        ->select('orders.*',
-        'inventories.cost_price as cost',)
+    $this->todays = DB::table('orders')
+        ->select(
+            'orders.id',
+            'orders.amount',
+            'orders.cash',
+            'orders.card',
+            'orders.upi',
+            DB::raw('SUM(inventories.cost_price) as cost')
+        )
         ->leftJoin('vend_carts', 'orders.id', '=', 'vend_carts.order_id')
-        ->leftJoin('inventories', 'vend_carts.inventory_id', '=', 'inventories.id')->get();
-        
-        $this->all_orders = $this->todays->count();
-        $this->all_amount = $this->todays->sum('amount');
-        $this->all_cash = $this->todays->sum('cash');
-        $this->all_card = $this->todays->sum('card');
-        $this->all_upi = $this->todays->sum('upi');
+        ->leftJoin('inventories', 'vend_carts.inventory_id', '=', 'inventories.id')
+        ->where('orders.status', '=', 'pending')
+        ->groupBy('orders.id')
+        ->get();
 
-        $this->all_cost = $this->todays->sum('cost');
-        $this->all_sales = $this->all_amount;
-        $this->all_profit = $this->all_sales - $this->all_cost;
+    $this->all_orders = $this->todays->count();
+    $this->all_amount = $this->todays->sum('amount');
+    $this->all_cash = $this->todays->sum('cash');
+    $this->all_card = $this->todays->sum('card');
+    $this->all_upi = $this->todays->sum('upi');
 
-        $this->loadOrders();
-        
+    $this->all_cost = $this->todays->sum('cost');
+    $this->all_sales = $this->all_amount;
+    $this->all_profit = $this->all_sales - $this->all_cost;
+
+    $this->loadOrders();
     }
 
     public function loadOrders()
     {
-        $this->orders = DB::table('orders')
-            ->select('orders.id', 'orders.user_id', 'orders.status', 'orders.cash', 'orders.card', 'orders.upi', 'orders.created_at', 'orders.updated_at', 'vendors.vendor_name as vendor_name')
-            ->leftjoin('users', 'orders.user_id', '=', 'users.id')
-            ->leftJoin('vendors', 'users.id', '=', 'vendors.user_id')
-            ->where('orders.status', '=', 'Pending')
-            ->groupBy('orders.id', 'orders.user_id', 'orders.status', 'orders.created_at', 'orders.updated_at', 'vendors.vendor_name')
-            ->get();
+    $this->orders = DB::table('orders')
+        ->select(
+            'orders.id',
+            'orders.user_id',
+            'orders.status',
+            'orders.cash',
+            'orders.card',
+            'orders.upi',
+            'orders.created_at',
+            'orders.updated_at',
+            'vendors.vendor_name as vendor_name'
+        )
+        ->leftJoin('users', 'orders.user_id', '=', 'users.id')
+        ->leftJoin('vendors', 'users.id', '=', 'vendors.user_id')
+        ->where('orders.status', '=', 'Pending')
+        ->groupBy(
+            'orders.id',
+            'orders.user_id',
+            'orders.status',
+            'orders.cash',
+            'orders.card',
+            'orders.upi',
+            'orders.created_at',
+            'orders.updated_at',
+            'vendors.vendor_name'
+        )
+        ->get();
 
-        if($this->orders){
-            $this->total_orders = $this->orders->count();
-            $this->total_cash = $this->orders->sum('cash');
-            $this->total_card = $this->orders->sum('card');
-            $this->total_upi = $this->orders->sum('upi');
-            $this->total_amt = $this->orders->sum('cash') + $this->orders->sum('card') + $this->orders->sum('upi');
-        }else{
-            $this->total_orders = 0;
-            $this->total_cash = 0;
-            $this->total_card = 0;
-            $this->total_upi = 0;
-            $this->total_amt = 0;
-        }
+    if ($this->orders) {
+        $this->total_orders = $this->orders->count();
+        $this->total_cash = $this->orders->sum('cash');
+        $this->total_card = $this->orders->sum('card');
+        $this->total_upi = $this->orders->sum('upi');
+        $this->total_amt = $this->total_cash + $this->total_card + $this->total_upi;
+    } else {
+        $this->total_orders = 0;
+        $this->total_cash = 0;
+        $this->total_card = 0;
+        $this->total_upi = 0;
+        $this->total_amt = 0;
     }
+    }
+
 
     public function updatedSelectAll($value)
     {
@@ -91,29 +118,50 @@ class DayClose extends Component
 
     public function search(Request $request)
     {
-        $this->orders = DB::table('orders')
-            ->select('orders.id', 'orders.user_id', 'orders.status', 'orders.cash', 'orders.card', 'orders.upi', 'orders.created_at', 'orders.updated_at', 'vendors.vendor_name as vendor_name')
-            ->leftjoin('users', 'orders.user_id', '=', 'users.id')
-            ->leftJoin('vendors', 'users.id', '=', 'vendors.user_id')
-            ->where('orders.status', '=', 'Pending')
-            ->where('orders.user_id', '=', $request->user_id)
-            ->groupBy('orders.id', 'orders.user_id', 'orders.status', 'orders.created_at', 'orders.updated_at', 'vendors.vendor_name')
-            ->get();
+    $this->orders = DB::table('orders')
+        ->select(
+            'orders.id',
+            'orders.user_id',
+            'orders.status',
+            'orders.cash',
+            'orders.card',
+            'orders.upi',
+            'orders.created_at',
+            'orders.updated_at',
+            'vendors.vendor_name as vendor_name'
+        )
+        ->leftJoin('users', 'orders.user_id', '=', 'users.id')
+        ->leftJoin('vendors', 'users.id', '=', 'vendors.user_id')
+        ->where('orders.status', '=', 'Pending')
+        ->where('orders.user_id', '=', $request->user_id)
+        ->groupBy(
+            'orders.id',
+            'orders.user_id',
+            'orders.status',
+            'orders.cash',
+            'orders.card',
+            'orders.upi',
+            'orders.created_at',
+            'orders.updated_at',
+            'vendors.vendor_name'
+        )
+        ->get();
 
-        if($this->orders){
-            $this->total_orders = $this->orders->count();
-            $this->total_cash = $this->orders->sum('cash');
-            $this->total_card = $this->orders->sum('card');
-            $this->total_upi = $this->orders->sum('upi');
-            $this->total_amt = $this->orders->sum('cash') + $this->orders->sum('card') + $this->orders->sum('upi');
-        }else{
-            $this->total_orders = 0;
-            $this->total_cash = 0;
-            $this->total_card = 0;
-            $this->total_upi = 0;
-            $this->total_amt = 0;
-        }
+    if ($this->orders) {
+        $this->total_orders = $this->orders->count();
+        $this->total_cash = $this->orders->sum('cash');
+        $this->total_card = $this->orders->sum('card');
+        $this->total_upi = $this->orders->sum('upi');
+        $this->total_amt = $this->total_cash + $this->total_card + $this->total_upi;
+    } else {
+        $this->total_orders = 0;
+        $this->total_cash = 0;
+        $this->total_card = 0;
+        $this->total_upi = 0;
+        $this->total_amt = 0;
     }
+    }
+
 
     public function updateStatus()
     {
