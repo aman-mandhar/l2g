@@ -6,5 +6,5 @@
                 {{ session('message') }}
             </div>
         @endif
-        @livewire('ProfitAndLoss')  
+        @livewire('report')  
 @endsection

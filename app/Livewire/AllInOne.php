@@ -70,9 +70,6 @@ class AllInOne extends Component
         ->leftJoin('product_subcategories', 'products.subcategory_id', '=', 'product_subcategories.id')
         ->leftJoin('product_variations', 'products.variation_id', '=', 'product_variations.id')->get();
 
-        // 
-            
-        
         // Fetch all stock
 
         $this->stocks = DB::table('inventories')
