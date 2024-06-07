@@ -75,22 +75,25 @@
                         </thead>
                         <tbody>
                             @foreach($prods as $prod)
+                            @php
+                                $stock = App\Models\Inventory::findOrFail($prod->id);
+                                $qty_in_stock = $stock->qty;
+                                $weight_in_stock = $stock->weight;
+                                $sold_qty = App\Models\VendCart::where('inventory_id', $prod->id)
+                                                                ->where('order_id', '!=', null)
+                                                                ->sum('quantity');
+                                $sold_weight = App\Models\VendCart::where('inventory_id', $prod->id)
+                                                                  ->where('order_id', '!=', null)
+                                                                  ->sum('weight');
+                                $qty = $qty_in_stock - $sold_qty;
+                                $weight = $weight_in_stock - $sold_weight;
+                            @endphp
+                            @if(($prod->type == '1' && $qty == 0) || ($prod->type != '1' && $weight == 0))
+                                @continue
+                            @endif
                             <tr>
                                 <td>{{ $prod->product_name }}</td>
                                 <td>
-                                    @php
-                                        $stock = App\Models\Inventory::findOrFail($prod->id);
-                                        $qty_in_stock = $stock->qty;
-                                        $weight_in_stock = $stock->weight;
-                                        $sold_qty = App\Models\VendCart::where('inventory_id', $prod->id)
-                                        ->where('order_id', '!=', null)
-                                        ->sum('quantity');
-                                        $sold_weight = App\Models\VendCart::where('inventory_id', $prod->id)
-                                        ->where('order_id', '!=', null)
-                                        ->sum('weight');
-                                        $qty = $qty_in_stock - $sold_qty;
-                                        $weight = $weight_in_stock - $sold_weight;
-                                    @endphp
                                     @if($prod->type == '1')
                                         {{ $qty }}
                                     @else
@@ -102,28 +105,29 @@
                                 </td>
                                 <form action="{{ route('vendor_sales.addtocart') }}" method="POST">
                                     @csrf 
-                                <td>   
-                                    @if($prod->type == '1')
-                                        <input type="numeric" name="quantity" placeholder="Enter quantity">
-                                    @else
-                                        <input type="numeric" name="weight" placeholder="Enter weight">
-                                    @endif
-                                </td>
-                                <td>
-                                    <input type="hidden" name="customer_id" value="{{$customer->id}}">
-                                    <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                                    <input type="hidden" name="inventory_id" value="{{$prod->id}}">
-                                    <input type="hidden" name="product_name" value="{{ $prod->product_name }}">
-                                    <input type="hidden" name="price" value="{{ $prod->sale_price }}">
-                                    <input type="hidden" name="discount" value="{{ $prod->discount }}">
-                                    <input type="hidden" name="gst_rate" value="{{ $prod->gst_rate }}">
-                                    <button type="submit" class="btn btn-primary">Add to Cart</button>
-                                </td>
+                                    <td>   
+                                        @if($prod->type == '1')
+                                            <input type="numeric" name="quantity" placeholder="Enter quantity">
+                                        @else
+                                            <input type="numeric" name="weight" placeholder="Enter weight">
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="customer_id" value="{{$customer->id}}">
+                                        <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                                        <input type="hidden" name="inventory_id" value="{{$prod->id}}">
+                                        <input type="hidden" name="product_name" value="{{ $prod->product_name }}">
+                                        <input type="hidden" name="price" value="{{ $prod->sale_price }}">
+                                        <input type="hidden" name="discount" value="{{ $prod->discount }}">
+                                        <input type="hidden" name="gst_rate" value="{{ $prod->gst_rate }}">
+                                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                                    </td>
                                 </form>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    
                   </div>
                 </div>
             </div>

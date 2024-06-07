@@ -95,26 +95,31 @@ class AllInOne extends Component
         ->leftJoin('product_variations', 'products.variation_id', '=', 'product_variations.id')->get();
 
         // Fetch all pending orders
-       
-        $this->orders = DB::table('orders')
+                // Check if user is vendor and has pending orders
+        $this->vendor = Vendor::where('user_id', Auth::user()->id)->first();
+        if($this->vendor){
+            $this->orders = DB::table('orders')
         ->select('orders.*',)
         ->leftJoin('vend_carts', 'orders.id', '=', 'vend_carts.order_id')
-        ->leftJoin('inventories', 'vend_carts.inventory_id', '=', 'inventories.id')->where('user_id', Auth::user()->id)
-        ->where('status', 'pending')->get();
+        ->leftJoin('inventories', 'vend_carts.inventory_id', '=', 'inventories.id')
+        ->where('orders.user_id', Auth::user()->id)
+        ->where('orders.status', 'pending')->get();
 
         $this->today_orders = $this->orders->count();
         $this->today_amount = $this->orders->sum('amount');
         $this->today_cash = $this->orders->sum('cash');
         $this->today_card = $this->orders->sum('card');
         $this->today_upi = $this->orders->sum('upi');
+        }
 
+        
         // Fetch all orders of vendor
 
         $this->allProducts = DB::table('orders')
         ->select('orders.*',)
         ->leftJoin('vend_carts', 'orders.id', '=', 'vend_carts.order_id')
         ->leftJoin('inventories', 'vend_carts.inventory_id', '=', 'inventories.id')
-        ->where('user_id', Auth::user()->id)->get();
+        ->where('orders.user_id', Auth::user()->id)->get();
 
         $this->total_orders = $this->allProducts->count();
         $this->total_amount = $this->allProducts->sum('amount');
