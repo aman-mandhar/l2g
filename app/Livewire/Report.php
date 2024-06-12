@@ -2,24 +2,12 @@
 
 namespace App\Livewire;
 
-use GuzzleHttp\Psr7\Request;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
 use Carbon\Carbon;
-
-
-use APP\Models\Inventory;
-use APP\Models\Product;
-use APP\Models\ProductCategory;
-use APP\Models\ProductSubcategory;
-use APP\Models\ProductVariation;
-use App\Models\User;
 use App\Models\Vendor;
-use App\Models\Order;
-use App\Models\VendCart;
 
 class Report extends Component
 {
@@ -27,19 +15,23 @@ class Report extends Component
 
     public $from_date;
     public $to_date;
+    public $vendors;
+    public $vendor;
 
     public function mount()
     {
         $this->from_date = date('Y-m-d');
         $this->to_date = date('Y-m-d');
+        $this->vendors = Vendor::all();
     }
 
     public function loadSoldOuts()
     {
         $fromDateTime = Carbon::parse($this->from_date)->startOfDay();
         $toDateTime = Carbon::parse($this->to_date)->endOfDay();
+        $vendor = $this->vendor;
 
-        return DB::table('vend_carts')
+        $query = DB::table('vend_carts')
             ->select(
                 'vend_carts.*', 
                 'vend_carts.product_name as name',
@@ -47,17 +39,24 @@ class Report extends Component
                 'vend_carts.price as price',
                 'vend_carts.total as total',
                 'inventories.cost_price as cost',
-                'vend_carts.updated_at as date'
+                'vend_carts.updated_at as date',
+                'vendors.vendor_name as vendor'
             )
             ->leftJoin('inventories', 'vend_carts.inventory_id', '=', 'inventories.id')
             ->leftJoin('products', 'inventories.product_id', '=', 'products.id')
             ->leftJoin('product_categories', 'products.category_id', '=', 'product_categories.id')
             ->leftJoin('product_subcategories', 'products.subcategory_id', '=', 'product_subcategories.id')
             ->leftJoin('product_variations', 'products.variation_id', '=', 'product_variations.id')
+            ->leftJoin('vendors', 'vend_carts.user_id', '=', 'vendors.user_id')
             ->where('vend_carts.order_id', '!=', null)
-            ->where('vend_carts.deleted_at', null)
-            ->whereBetween('vend_carts.updated_at', [$fromDateTime, $toDateTime])
-            ->paginate(20);
+            ->whereNull('vend_carts.deleted_at')
+            ->whereBetween('vend_carts.updated_at', [$fromDateTime, $toDateTime]);
+
+        if ($vendor) {
+            $query->where('vend_carts.user_id', $vendor);
+        }
+
+        return $query->get();
     }
 
     public function calculateTotals($soldOuts)
@@ -84,12 +83,13 @@ class Report extends Component
 
     public function updated($propertyName)
     {
-        if (in_array($propertyName, ['from_date', 'to_date'])) {
+        if (in_array($propertyName, ['from_date', 'to_date', 'vendor'])) {
             $this->searchSale();
         }
         $this->validateOnly($propertyName, [
-            'from_date' => 'required|date',
-            'to_date' => 'required|date',
+            'from_date' => 'nullable|date',
+            'to_date' => 'nullable|date',
+            'vendor' => 'nullable|exists:users,id',
         ]);
     }
 

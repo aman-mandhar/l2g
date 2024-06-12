@@ -5,7 +5,7 @@
         <tr>
             <th>Order ID</th>
             <th>Amount</th>
-            <th>GST</th>
+            <th>Sold By</th>
             <th>Date</th>
             <th>Action</th>
             
@@ -14,8 +14,8 @@
             <tr>
                 <td>{{ $order->id }}</td>
                 <td>{{ $order->amount }}</td>
-                <td>{{ $order->gst }}</td>
-                <td>{{ $order->created_at }}</td>
+                <td>{{ $order->Salesperson }}</td>
+                <td>{{ $order->updated_at }}</td>
                 <td><a href="{{ route('admin_orders.show', $order->id) }}">View</a></td>
                 
             </tr>

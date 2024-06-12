@@ -108,69 +108,70 @@
                    </div>
                 </div>
                 <div class="table_section padding_infor_info">
-                   <div class="table-responsive-sm">
-                     <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Category</th>
-                                <th>Sub-Category</th>
-                                <th>Variations</th>
-                                <th>Stock</th>
-                                <th>MRP</th>
-                                <th>Sale Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($stocks as $stock) 
-                            @php
-                                $item = App\Models\Inventory::findOrFail($stock->id);
-                                $qty_in_stock = $item->qty;
-                                $weight_in_stock = $item->weight;
-                                $sold_qty = App\Models\VendCart::where('inventory_id', $stock->id)
-                                                                ->where('order_id', '!=', null)
-                                                                ->sum('quantity');
-                                $sold_weight = App\Models\VendCart::where('inventory_id', $stock->id)
+                  <div class="table-responsive-sm">
+                      <table class="table">
+                          <thead>
+                              <tr>
+                                  <th>Name</th>
+                                  <th>Category</th>
+                                  <th>Sub-Category</th>
+                                  <th>Variations</th>
+                                  <th>Stock</th>
+                                  <th>MRP</th>
+                                  <th>Sale Price</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              @foreach($stocks as $stock) 
+                              @php
+                                  $item = App\Models\Inventory::findOrFail($stock->id);
+                                  $qty_in_stock = $item->qty;
+                                  $weight_in_stock = $item->weight;
+                                  $sold_qty = App\Models\VendCart::where('inventory_id', $stock->id)
                                                                   ->where('order_id', '!=', null)
-                                                                  ->sum('weight');
-                                $qty = $qty_in_stock - $sold_qty;
-                                $weight = $weight_in_stock - $sold_weight;
-                            @endphp
-                            @if(($stock->type == '1' && $qty == 0) || ($stock->type != '1' && $weight == 0))
-                                @continue
-                            @endif
-                            <tr>
-                                <td>{{ $stock->product_name }}</td>
-                                <td>{{ $stock->category_name }}</td>
-                                <td>{{ $stock->subcategory_name }}</td>
-                                <td>
-                                    @if($stock->colour)
-                                        Colour - {{ $stock->colour }}
-                                    @elseif($stock->size)
-                                        Size - {{ $stock->size }}
-                                    @elseif($stock->weight)
-                                        Weight - {{ $stock->weight }}
-                                    @elseif($stock->length)
-                                        Length - {{ $stock->length }}
-                                    @elseif($stock->liquid)
-                                        Liquid - {{ $stock->liquid }}
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($stock->type == '1')
-                                        {{ $qty }}
-                                    @else
-                                        {{ $weight }}
-                                    @endif
-                                </td>
-                                <td>{{ $stock->mrp }}</td>
-                                <td>{{ $stock->price }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                   </div>
-                </div>
+                                                                  ->sum('quantity');
+                                  $sold_weight = App\Models\VendCart::where('inventory_id', $stock->id)
+                                                                    ->where('order_id', '!=', null)
+                                                                    ->sum('weight');
+                                  $qty = $qty_in_stock - $sold_qty;
+                                  $weight = $weight_in_stock - $sold_weight;
+                              @endphp
+                              @if(($stock->type == '1' && $qty == 0) || ($stock->type != '1' && $weight == 0))
+                                  @continue
+                              @endif
+                              <tr>
+                                  <td>{{ $stock->product_name }}</td>
+                                  <td>{{ $stock->category_name }}</td>
+                                  <td>{{ $stock->subcategory_name }}</td>
+                                  <td>
+                                      @if($stock->colour)
+                                          Colour - {{ $stock->colour }}
+                                      @elseif($stock->size)
+                                          Size - {{ $stock->size }}
+                                      @elseif($stock->weight)
+                                          Weight - {{ $stock->weight }}
+                                      @elseif($stock->length)
+                                          Length - {{ $stock->length }}
+                                      @elseif($stock->liquid)
+                                          Liquid - {{ $stock->liquid }}
+                                      @endif
+                                  </td>
+                                  <td>
+                                      @if($stock->type == '1')
+                                          {{ $qty }}
+                                      @else
+                                          {{ $weight }}
+                                      @endif
+                                  </td>
+                                  <td>{{ $stock->mrp }}</td>
+                                  <td>{{ $stock->price }}</td>
+                              </tr>
+                              @endforeach
+                          </tbody>
+                      </table>
+                  </div>
+                  <button class="btn btn-primary" onclick="window.print()">Print</button>
+              </div>
              </div>
           </div>
        </div>

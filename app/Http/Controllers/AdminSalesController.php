@@ -32,7 +32,13 @@ class AdminSalesController extends Controller
 {
     public function index()
     {
-        $orders = Order::all();
+        $orders = DB::table('orders')
+            ->select('orders.*', 'vendors.vendor_name as Salesperson')
+            ->leftJoin('users', 'orders.user_id', '=', 'users.id')
+            ->leftJoin('vendors', 'users.id', '=', 'vendors.user_id')
+            ->where('orders.deleted_at', null)
+            ->orderBy('orders.created_at', 'desc')
+            ->get();
         return view('admin_sales.index', compact('orders'));
     }
 

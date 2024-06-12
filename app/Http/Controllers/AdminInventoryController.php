@@ -29,6 +29,9 @@ class AdminInventoryController extends Controller
 {
     public function index()
     {
+        $search = '';
+        $from = '';
+        $to = '';
         $productQuery = DB::table('inventories')
                 ->select('inventories.*', 
                       'products.name as product_name', 
@@ -49,7 +52,7 @@ class AdminInventoryController extends Controller
                 ->leftJoin('product_variations', 'products.variation_id', '=', 'product_variations.id');
                 
         $inventories = $productQuery->get();
-        return view('admin_inventories.index', compact('inventories'));
+        return view('admin_inventories.index', compact('inventories', 'search', 'from', 'to'));
     }
 
     public function search(Request $request)
@@ -84,7 +87,35 @@ class AdminInventoryController extends Controller
                           ->orWhere('product_variations.length', 'like', '%'.$search.'%')
                           ->orWhere('product_variations.liquid_volume', 'like', '%'.$search.'%')->get();
         
-        return view('admin_inventories.index', compact('inventories'));
+        return view('admin_inventories.index', compact('inventories', 'search'));
+    }
+
+    public function dateSearch(Request $request)
+    {
+        $from = $request->get('from');
+        $to = $request->get('to');
+        $productQuery = DB::table('inventories')
+                ->select('inventories.*', 
+                      'products.name as product_name', 
+                      'products.description as product_description',
+                      'products.type as product_type',
+                      'product_categories.name as category_name', 
+                      'product_subcategories.name as subcategory_name',
+                      'product_variations.color as colour',
+                      'product_variations.size as size',
+                      'product_variations.weight as weight',
+                      'product_variations.length as length',
+                      'product_variations.liquid_volume as liquid',
+                      'products.prod_pic as prod_pic',
+                      )
+                ->leftJoin('products', 'inventories.product_id', '=', 'products.id')
+                ->leftJoin('product_categories', 'products.category_id', '=', 'product_categories.id')
+                ->leftJoin('product_subcategories', 'products.subcategory_id', '=', 'product_subcategories.id')
+                ->leftJoin('product_variations', 'products.variation_id', '=', 'product_variations.id');
+                
+        $inventories = $productQuery->whereBetween('inventories.updated_at', [$from, $to])->get();
+        
+        return view('admin_inventories.index', compact('inventories', 'from', 'to'));
     }
 
     public function addstock()

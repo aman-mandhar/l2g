@@ -1,10 +1,11 @@
 @extends('layouts.panels.admin_panel.dashboard')
 @section('content')
     <div class="container">
+        <h1>Inventory</h1>
+                
         <div class="row">
-            <div class="col-md-12">
-                <h1>Inventory</h1>
-                <a href="{{ route('admin_inventories.create') }}" class="btn btn-primary">Add Inventory</a>
+            <div class="col-md-3">
+                <h5>Search by Name</h5>
                 <form action="{{ route('admin_inventories.search') }}" method="GET">
                     <div class="form-group">
                         <label for="search">Search</label>
@@ -12,6 +13,22 @@
                         <button type="submit" class="btn btn-primary">Search</button>
                     </div>
                 </form>
+            </div>
+            <div class="col-md-9">
+                <h5>Advance Search</h5>
+                <form action="{{ route('admin_inventories.dateSearch') }}" method="GET">
+                    <div class="form-group">
+                        <label for="from">From</label>
+                        <input type="date" id="from" name="from" class="form-control">
+                        <label for="to">To</label>
+                        <input type="date" id="to" name="to" class="form-control">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 <table class="table">
                     <thead>
                         <tr>
@@ -21,6 +38,7 @@
                             <th>Sale Price</th>
                             <th>Stock in Hand</th>
                             <th>Barcode</th>
+                            <th>Date</th>
                             
                         </tr>
                     </thead>
@@ -57,13 +75,14 @@
                                     <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($inventory->qr_code, 'C39',1,33,array(1,1,1)) }}" alt="barcode" />
                                     <p>p - {{ $inventory->qr_code }}</p>
                                 </td>
-                                
+                                <td>{{ $inventory->updated_at }}</td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-            <button type="button" class="btn btn-primary" onclick="window.print()">Print</button>     
             </div>
         </div>
+            <button type="button" class="btn btn-primary" onclick="window.print()">Print</button>     
+    </div>
 
 @endsection

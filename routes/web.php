@@ -205,6 +205,7 @@ Route::get('/admin_inventories/searchProduct', [AdminInventoryController::class,
 Route::get('/admin_inventories/details/{id}', [AdminInventoryController::class, 'details'])->name('admin_inventories.details');
 Route::get('/admin_inventories', [AdminInventoryController::class, 'index'])->name('admin_inventories.index');
 Route::get('/admin_inventories/search', [AdminInventoryController::class, 'search'])->name('admin_inventories.search');
+Route::get('/admin_inventories/datesearch', [AdminInventoryController::class, 'dateSearch'])->name('admin_inventories.dateSearch');
 Route::get('/admin_inventories/create', [AdminInventoryController::class, 'create'])->name('admin_inventories.create');
 Route::get('/admin_inventories/addnewstock', [AdminInventoryController::class, 'addnewstock'])->name('admin_inventories.addnewstock');
 Route::post('/admin_inventories', [AdminInventoryController::class, 'store'])->name('admin_inventories.store');
