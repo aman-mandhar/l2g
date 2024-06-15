@@ -10,11 +10,7 @@
                 <h4>Contact No. - {{ $shop->mobile_no }}</h4>
             </p>
         </div>
-        <div class="col-md-6">
-            <p>
-                <h4>GST Number - {{ $shop->gst_no }}</h4>
-            </p>
-        </div>
+        
     </div>
     <hr>
 
@@ -24,20 +20,16 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Order ID</th>
-                        <th>Customer Name</th>
-                        <th>Customer Phone</th>
-                        <th>Order Date</th>
-                        <th>Billed by</th>
+                        <th><h5>Order ID</h5></th>
+                        <th><h5>Order Date</h5></th>
+                        <th><h5>Billed by</h5></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{ $order->id }}</td>
-                        <td>{{ $customer->name }}</td>
-                        <td>{{ $customer->mobile_number }}</td>
-                        <td>{{ $order->created_at }}</td>
-                        <td>{{ $order->status }}</td>
+                        <td><h5>{{ $order->id }}</h5></td>
+                        <td><h5>{{ $order->created_at }}</h5></td>
+                        <td><h5>{{ $order->status }}</h5></td>
                     </tr>
                 </tbody>
             </table>
@@ -46,18 +38,17 @@
                 <h4>Items in Order</h4>
                 <thead>
                     <tr>
-                        <th>Product Details</th>
-                        <th>Qty. / Weight</th>
-                        <th>Sale Price</th>
-                        <th>Spl Discount</th>
-                        <th>Sub-Total</th>
+                        <th><h5>Product Details</h5></th>
+                        <th><h5>Qty. / Weight</h5></th>
+                        <th><h5>Sale Price</h5></th>
+                        <th><h5>Sub-Total</h5></th>
                     </tr>
                 </thead>
                 <tbody  class="col-md-12">
                     @if($orderItems)
                         @foreach($orderItems as $orderItem)
                         <tr>
-                            <td>
+                            <td><h5>
                                 {{ $orderItem->product_name }} -
                                 {{ $orderItem->category }} -
                                 {{ $orderItem->subcategory }} -
@@ -66,14 +57,13 @@
                                 {{ $orderItem->weight }} -
                                 {{ $orderItem->length }} -
                                 {{ $orderItem->liquid_volume }}
-                            </td>
-                            <td>
+                            </h5></td>
+                            <td><h5>
                                 {{ $orderItem->quantity }}
                                 {{ $orderItem->item_weight }}
-                            </td>
-                            <td>{{ number_format($orderItem->item_price. 2) }}</td>
-                            <td>{{ number_format($orderItem->item_discount, 2) }}</td>
-                            <td>{{ number_format($orderItem->item_total, 2) }}</td>
+                            </h5></td>
+                            <td><h5>{{ number_format($orderItem->item_price. 2) }}</h5></td>
+                            <td><h5>{{ number_format($orderItem->item_total, 2) }}</h5></td>
                         </tr>
                         @endforeach
                     @endif
@@ -84,16 +74,12 @@
                 <h4>Order Summary</h4>
                 <thead>
                     <tr>
-                        <th>Discount</th>
-                        <th>GST</th>
-                        <th>Total</th>
+                        <th><h5>Total</h5></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{ number_format($order->spl_discount, 2) }}</td>
-                        <td>{{ number_format($order->gst, 2) }}</td>
-                        <td>{{ number_format($amt_paid, 2) }}</td>
+                        <td><h5>{{ number_format($amt_paid, 2) }}</h5></td>
                     </tr>
                 </tbody>
             </table>
@@ -106,16 +92,16 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Cash</th>
-                        <th>Cheque</th>
-                        <th>Upi</th>
+                        <th><h5>Cash</h5></th>
+                        <th><h5>Cheque</h5></th>
+                        <th><h5>Upi</h5></th>
                     </tr>
                 </thead>
                 <tbody>
                         <tr>
-                            <td>{{ number_format($order->cash, 2) }}</td>
-                            <td>{{ number_format($order->card, 2) }}</td>
-                            <td>{{ number_format($order->upi, 2) }}</td>
+                            <td><h5>{{ number_format($order->cash, 2) }}</h5></td>
+                            <td><h5>{{ number_format($order->card, 2) }}</h5></td>
+                            <td><h5>{{ number_format($order->upi, 2) }}</h5></td>
                         </tr>
                 </tbody>
             </table>
